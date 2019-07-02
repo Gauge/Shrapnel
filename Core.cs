@@ -1,4 +1,5 @@
-﻿using Sandbox.ModAPI;
+﻿using Sandbox.Definitions;
+using Sandbox.ModAPI;
 using System.Collections.Generic;
 using VRage.Game;
 using VRage.Game.Components;
@@ -44,7 +45,17 @@ namespace Shrapnel
                 int count = data.Neighbours.Count;
                 foreach (IMySlimBlock neighbour in data.Neighbours)
                 {
-                    float damage = ((data.OverKill / (float)count) * ReductionMult);
+                    // get block resistance
+                    float generalMult = 1;
+                    if (neighbour.BlockDefinition is MyCubeBlockDefinition)
+                    {
+                        generalMult = ((MyCubeBlockDefinition)neighbour.BlockDefinition).GeneralDamageMultiplier;
+                    }
+
+                    // total over kill damage devided by the number of neighbours
+                    // that times the reduction multiplier 0 to 1
+                    // that times the blocks general reduction multiplier 0 - 1
+                    float damage = ((data.OverKill / (float)count) * ReductionMult * generalMult);
                     neighbour.DoDamage(damage, MyDamageType.Bullet, true);
                 }
             }

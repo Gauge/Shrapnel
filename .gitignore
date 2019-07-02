@@ -2,3 +2,4 @@
 *.sln
 obj/
 Properties/
+/.vs/Shrapnel/v15/Server/sqlite3
